@@ -7,6 +7,7 @@ import { fetchCalendarResults } from '../utils/api';
 import UdaciFitnessCalendar from 'udacifitness-calendar';
 import DateHeader from './DateHeader';
 import { white } from '../utils/colors';
+import MetricCard from './MetricCard';
 
 class History extends Component {
   	componentDidMount () {
@@ -14,7 +15,7 @@ class History extends Component {
 
     	fetchCalendarResults()
       		.then((entries) => dispatch(receiveEntries(entries)))
-      		.then((entries) => {
+      		.then(({entries}) => {
         		if (!entries[timeToString()]) {
           			dispatch(addEntry({
             			[timeToString()]: getDailyReminderValue()
@@ -32,7 +33,7 @@ class History extends Component {
   						</Text>
   				  	</View>
   				: 	<TouchableOpacity onPress={() => console.log('Pressed')}>
-  						<Text>{JSON.stringify(metrics)}</Text>
+  						<MetricCard metrics={metrics} date={formattedDate} />
   					</TouchableOpacity>
   			}
   		</View>
@@ -51,9 +52,10 @@ class History extends Component {
   		const { entries } = this.props;
     	return (
     		<UdaciFitnessCalendar
-    			items={entries}
-    			renderItem={this.renderItem}
-    			renderEmptyDate={this.renderEmptyDate} />
+            	items={entries}
+            	renderItem={this.renderItem}
+				renderEmptyDate={this.renderEmptyDate} />
+
     	)
   	}
 }
