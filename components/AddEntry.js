@@ -10,6 +10,7 @@ import { submitEntry, removeEntry } from '../utils/api';
 import { connect } from 'react-redux';
 import { addEntry } from '../actions';
 import { white, purple } from '../utils/colors';
+import { NavigationActions } from 'react-navigation';
 
 function SubmitBtn ({ onPress }) {
 	return (
@@ -63,6 +64,8 @@ class AddEntry extends Component {
 		}))
 	}
 
+	// the order of operations doesn't really matter here
+	// it's all happening asynchronous
 	submit = () => {
 		const key = timeToString();
 		const entry = this.state;
@@ -80,22 +83,31 @@ class AddEntry extends Component {
 			eat: 0,
 		}))
 
-		// TODO: Navigate to Home
-
+		// Navigate to Home
+		this.toHome();
 		submitEntry({ key, entry });
 
 		// TODO: Clear local notifications
 	}
 
+	// the order of operations doesn't really matter here
+	// it's all happening asynchronous
 	reset = () => {
 		const key = timeToString();
 
 		this.props.dispatch(addEntry({
 			[key]: getDailyReminderValue()
 		}))
-		// TODO: Route to Home
 
+		// Route to Home
+		this.toHome();
 		removeEntry(key)
+	}
+
+	toHome = () => {
+		this.props.navigation.dispatch(NavigationActions.back({
+			key: 'AddEntry'
+		}))
 	}
 
 	render() {
