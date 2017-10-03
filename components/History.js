@@ -19,6 +19,9 @@ class History extends Component {
 
     	fetchCalendarResults()
       		.then((entries) => dispatch(receiveEntries(entries)))
+      		.catch((e) => {
+      			console.log(e)
+      		})
       		.then(({entries}) => {
         		if (!entries[timeToString()]) {
           			dispatch(addEntry({
@@ -29,6 +32,7 @@ class History extends Component {
       		.then(() => this.setState(() => ({
       			ready: true,
       		})))
+
   	}
   	renderItem = ({ today, ...metrics }, formattedDate, key) => (
   		<View style={styles.item}>
@@ -101,7 +105,6 @@ const styles = StyleSheet.create({
 })
 
 function mapStateToProps (entries) {
-	console.log(entries)
   	return {
     	entries
   	}
